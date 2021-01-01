@@ -3,6 +3,7 @@ package com.gauro.config;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import java.util.function.Function;
 /**
  * @author Chandra
  */
+@Slf4j
 @Component
 public class JwtTokenUtil implements Serializable {
     private static final long serialVersionUID = 2256072595316448239L;
@@ -52,6 +54,7 @@ public class JwtTokenUtil implements Serializable {
     //generate token for user
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        log.info(" JwtTokenUtil generateToken=====>10");
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
@@ -61,10 +64,14 @@ public class JwtTokenUtil implements Serializable {
     //3. According to JWS Compact Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
     //   compaction of the JWT to a URL-safe string
     private String doGenerateToken(Map<String, Object> claims, String subject) {
-
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+        log.info(" JwtTokenUtil doGenerateToken=====>10");
+        String token= Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
+        log.info(" JwtTokenUtil doGenerateToken=====>20");
+        log.info(token);
+        log.info(" JwtTokenUtil doGenerateToken=====>30");
+        return token;
     }
 
     //validate token
