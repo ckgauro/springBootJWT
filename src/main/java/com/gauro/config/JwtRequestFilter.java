@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +22,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 /**
  * @author Chandra
  */
+@Slf4j
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
@@ -32,6 +34,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
+
+        log.info("JwtRequestFilter doFilterInternal=====>10");
         final String requestTokenHeader = request.getHeader("Authorization");
 
         String username = null;
@@ -41,7 +45,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
             try {
+                log.info("JwtRequestFilter doFilterInternal=====>10");
+                log.info(jwtToken);
+
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+                log.info(username);
             } catch (IllegalArgumentException e) {
                 System.out.println("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
@@ -50,7 +58,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         } else {
             logger.warn("JWT Token does not begin with Bearer String");
         }
-
+        log.info("JwtRequestFilter doFilterInternal=====>30");
         // Once we get the token validate it.
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 

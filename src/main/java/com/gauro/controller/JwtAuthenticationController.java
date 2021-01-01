@@ -40,7 +40,8 @@ public class JwtAuthenticationController {
     private JwtUserDetailsService userDetailsService;
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest)
+            throws Exception {
 
         log.info("createAuthenticationToken========>10");
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
@@ -54,7 +55,7 @@ public class JwtAuthenticationController {
         log.info("createAuthenticationToken========>40");
         JwtResponse tokendata=new JwtResponse(token);
        // return ResponseEntity.ok(new JwtResponse(token));
-        log.info("createAuthenticationToken========>50");
+        log.info("createAuthenticationToken JwtResponse========>50");
         log.info(tokendata.toString());
         return ResponseEntity.ok(tokendata);
     }

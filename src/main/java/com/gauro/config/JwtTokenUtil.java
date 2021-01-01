@@ -28,6 +28,7 @@ public class JwtTokenUtil implements Serializable {
 
     //retrieve username from jwt token
     public String getUsernameFromToken(String token) {
+        log.info("getUsernameFromToken is called ======>10");
         return getClaimFromToken(token, Claims::getSubject);
     }
 
@@ -37,16 +38,20 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+        log.info("getClaimFromToken is called ======>10");
         final Claims claims = getAllClaimsFromToken(token);
+        log.info(claims.toString());
         return claimsResolver.apply(claims);
     }
     //for retrieveing any information from token we will need the secret key
     private Claims getAllClaimsFromToken(String token) {
+        log.info("getAllClaimsFromToken is called ======>10");
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
     //check if the token has expired
     private Boolean isTokenExpired(String token) {
+        log.info("isTokenExpired is called ======>10");
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
@@ -76,6 +81,7 @@ public class JwtTokenUtil implements Serializable {
 
     //validate token
     public Boolean validateToken(String token, UserDetails userDetails) {
+        log.info("Validation is called ======>10");
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
